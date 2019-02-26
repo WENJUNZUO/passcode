@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="button" id="btn" value="快来吹泡泡"/>
+		<script type="text/javascript">
+			var oBtn = document.getElementById('btn');
+			var arr = ['吕布','貂蝉','关羽','赵云','司马懿','诸葛亮','大乔','小乔','周瑜','诸葛瑾','吕蒙','曹操','孙权','孙策','庞统','魏延','姜维','典韦','于禁','张辽','蔡文姬','孙尚香','夏侯渊','徐晃','曹仁','袁绍'];
+			var winW = document.documentElement.clientWidth;
+			var winH = document.documentElement.clientHeight;
+			
+			oBtn.addEventListener('click',addBubbles);
+			function addBubbles(){
+				var oDiv = document.createElement('div');
+				insertDiv(oDiv);
+				shakeDiv(oDiv);
+				pullDiv(oDiv);				
+			}
+			
+			function pullDiv(ele){
+				ele.onmousedown = function(ev){
+					var disX = ev.clientX - ele.offsetLeft;
+					var disY = ev.clientY - ele.offsetTop;
+					document.onmousemove = function(ev){
+						ev.preventDefault();
+						ele.style.left = ev.clientX - disX + 'px';
+						ele.style.top = ev.clientY - disY + 'px';
+					}
+					ele.onmouseup = function(){						
+						document.onmousemove = null;
+						ele.onmouseup = null;
+					}
+				}
+			}
+			
+			function shakeDiv(ele){
+				var timer = setInterval(function(){
+					ele.style.left = ele.offsetLeft + getRand(-3,4) + 'px';
+					ele.style.top = ele.offsetTop + getRand(-3,4) + 'px';
+				},50);
+				ele.onmouseover = function(){
+					clearInterval(timer);
+				}
+				ele.onmouseout = function(){
+					timer = setInterval(function(){
+						ele.style.left = ele.offsetLeft + getRand(-3,4) + 'px';
+						ele.style.top = ele.offsetTop + getRand(-3,4) + 'px';
+					},50);
+				}
+			}
+			
+			function insertDiv(ele){				
+				setDivCss(ele,{
+					width:'60px',
+					height:'60px',
+					borderRadius:"50%",
+					backgroundColor:'rgb('+getRand(0,256)+','+getRand(0,256)+','+getRand(0,256)+')',
+					position:'absolute',
+					left:getRand(ele.offsetWidth,winW-ele.offsetWidth)+'px',
+					top:getRand(ele.offsetHeight,winH-ele.offsetHeight)+'px',
+					textAlign:'center',
+					lineHeight:'60px',
+					color:'white'
+				});
+				ele.innerText = arr[getRand(0,arr.length)];
+				document.body.appendChild(ele);
+			}
+			
+			function getRand(a,b){
+				return Math.floor(Math.random()*(a-b)+b)
+			}
+			function setDivCss(ele,obj){
+				for(var prop in obj){
+					ele.style[prop] = obj[prop];
+				}
+			}
+			
+		</script>
+	</body>
+</html>
